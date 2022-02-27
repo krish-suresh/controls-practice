@@ -16,12 +16,12 @@ float slide_pos_dot = 0;
 float joint_0_pos_dot = 0;
 float joint_1_pos_dot = 0;
 float x_dot_dot = 0;
-// -447.2135957  -563.44602775 3369.70564175 1034.98811243
-float K_0 = -447.2135957;
-float K_1 = -563.44602775;
-float K_2 = 3369.70564175;
-float K_3 = 1034.98811243;
-
+// -223.60679784 -374.38787001 2853.69348521 1124.31833194
+float K_0 = -223.60679784;
+float K_1 = -374.38787001;
+float K_2 = 2853.69348521;
+float K_3 = 1124.31833194;
+bool off = false;
 int current_time = 0;
 int prev_time = 0;
 float time_diff = 0;
@@ -29,10 +29,14 @@ float time_diff = 0;
 void setup() {
   Serial.begin(9600);
   Wire.begin();
+  while(Serial.available() == 0) {
+  }
 }
 long oldPosition  = -999;
-
+double divideVal = 500;
 void loop() {
+
+
   current_time = millis();
   time_diff = (current_time - prev_time)/1000.0;
   slide_pos = slide.read()/464.64 * 0.04;
@@ -49,16 +53,22 @@ void loop() {
   Serial.print(",");
   Serial.print(joint_0_pos_dot,7);
   Serial.print(" | ");
-  Serial.println(x_dot_dot,7);
-  setForce(x_dot_dot);
+  Serial.println(x_dot_dot/divideVal,7);
+//  if (!off) {
+     setForce(x_dot_dot);
+//
+//  } else {
+//     setForce(0);
+//  }
   slide_pos_prev = slide_pos;
   joint_0_pos_prev = joint_0_pos;
   prev_time = current_time;
+
 }
 
 void setForce(double x_dot_dot) {
 
-  double motor_power  = x_dot_dot/5000; // -1 to 1, neg to to the right
+  double motor_power  = x_dot_dot/divideVal; // -1 to 1, neg to to the right
   jrk.setTarget((-motor_power*600)+ 2048);
 }
 

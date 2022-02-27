@@ -9,8 +9,8 @@ import control
 CART_W = 0.05
 CART_H = 0.05
 CART_Y = 0.15
-L = 0.062
-m = 0.01 # Pendulum Mass
+L = 0.3302
+m = 0.1 # Pendulum Mass
 M = 0.2 # Cart Mass
 dt = 0.01
 t_stop = 10
@@ -26,9 +26,9 @@ B = np.array([[0],[1/M],[0],[s*1/(M*L)]])
 # print(np.linalg.matrix_rank(control.ctrb(A, B)))
 p = np.array([-4.3,-4.4,-4.5,-4.6])
 K = control.place(A,B,p)
-Q = np.array([[20,0,0,0],
+Q = np.array([[5,0,0,0],
               [0,1,0,0],
-              [0,0,10,0],
+              [0,0,30,0],
               [0,0,0,100]])
 R = .0001
 
@@ -56,7 +56,7 @@ line,  = ax.plot([],[], lw=2)
 cart, = ax.plot([],[], marker='o', color='r', ls='')
 
 def draw_pendulum(i):
-    line.set_data([state[i][0], state[i][0]-L*sin(state[i][2])],[CART_Y, CART_Y-L*cos(state[i][2])])
+    line.set_data([state[i][0], state[i][0]-L*sin(-state[i][2])],[CART_Y, CART_Y-L*cos(-state[i][2])])
     cart.set_data(state[i][0], CART_Y)
     return line, cart,
 # ax.axis('equal')
